@@ -1,0 +1,243 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --ufa-bg: #F6F9FE;
+    --ufa-surface: #FFFFFF;
+    --ufa-surface-soft: #F1F6FD;
+    --ufa-border: #CBD9EC;
+    --ufa-border-subtle: #DCE6F4;
+    --ufa-navy: #0F294D;
+    --ufa-navy-mid: #1E3A63;
+    --ufa-slate: #4A6587;
+    --ufa-blue: #1D6FE8;
+    --ufa-blue-light: #DBEAFE;
+    --ufa-teal: #10B981;
+    --ufa-teal-dark: #047857;
+    --ufa-teal-soft: #ECFDF5;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--ufa-bg);
+    color: var(--ufa-navy);
+    margin: 0;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+}
+
+/* Custom subtle scrollbars matching clean white/blue-gray aesthetic */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F6FD;
+}
+::-webkit-scrollbar-thumb {
+  background: #BFD3EC;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #93B4DF;
+}
+
+@keyframes dashFlowBlue {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+@keyframes dashFlowTeal {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+@keyframes pulseSoft {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.15);
+  }
+}
+
+.animate-dash-blue {
+  animation: dashFlowBlue 1.4s linear infinite;
+}
+
+.animate-dash-teal {
+  animation: dashFlowTeal 1.2s linear infinite;
+}
+
+.animate-live-dot {
+  animation: pulseSoft 2s ease-in-out infinite;
+}
+
+.ufa-card {
+  background: #FFFFFF;
+  border: 1px solid #CBD9EC;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(15, 41, 77, 0.04);
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Responsive 5-card KPI row using container queries so cards fit on 1 row on desktop and reflow cleanly at narrower widths */
+.ufa-kpi-row-wrap {
+  container-type: inline-size;
+  width: 100%;
+  min-width: 0;
+}
+
+.ufa-kpi-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}
+
+@container (min-width: 330px) {
+  .ufa-kpi-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container (min-width: 520px) {
+  .ufa-kpi-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@container (min-width: 680px) {
+  .ufa-kpi-row {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+  }
+}
+
+@container (min-width: 960px) {
+  .ufa-kpi-row {
+    gap: 12px;
+  }
+}
+
+.ufa-kpi-card {
+  container-type: inline-size;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.ufa-kpi-card-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 9px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ufa-kpi-icon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.ufa-kpi-label {
+  font-size: 10.5px;
+  line-height: 1.25;
+}
+
+.ufa-kpi-metrics {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  width: 100%;
+}
+
+.ufa-kpi-value {
+  font-size: 13.5px;
+  line-height: 1.2;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ufa-kpi-delta {
+  padding: 1px 5px;
+  font-size: 9.5px;
+  line-height: 1.3;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ufa-kpi-sparkline {
+  flex: 1 1 24px;
+  min-width: 20px;
+  max-width: 48px;
+  height: 18px;
+  margin-left: auto;
+}
+
+@container (min-width: 162px) {
+  .ufa-kpi-card-inner {
+    gap: 9px;
+    padding: 9px 11px;
+  }
+  .ufa-kpi-icon {
+    width: 32px;
+    height: 32px;
+  }
+  .ufa-kpi-label {
+    font-size: 11px;
+  }
+  .ufa-kpi-metrics {
+    gap: 6px;
+  }
+  .ufa-kpi-value {
+    font-size: 15.5px;
+  }
+  .ufa-kpi-delta {
+    padding: 2px 6px;
+    font-size: 10px;
+  }
+  .ufa-kpi-sparkline {
+    max-width: 56px;
+    height: 20px;
+  }
+}
+
+@container (min-width: 205px) {
+  .ufa-kpi-card-inner {
+    gap: 12px;
+    padding: 10px 14px;
+  }
+  .ufa-kpi-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .ufa-kpi-metrics {
+    gap: 8px;
+  }
+  .ufa-kpi-value {
+    font-size: 18px;
+  }
+  .ufa-kpi-sparkline {
+    max-width: 64px;
+    height: 22px;
+  }
+}
