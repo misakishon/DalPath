@@ -50,15 +50,18 @@ export function LiveJourneyPage() {
     <div className="space-y-3">
       {/* Main 3-Column Topology Workspace matching visual reference */}
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-12">
-        {/* Left: Site-Page Tree */}
-        <div className="min-w-0 lg:col-span-3 xl:col-span-2 min-h-[420px]">
-          <SitePageTree
-            site={selectedSite}
-            pages={pages}
-            selectedPath={selectedPagePath}
-            onSelectPath={setSelectedPagePath}
-            onPagesChanged={refreshAll}
-          />
+        {/* Left: Site-Page Tree (locked to center column height on desktop, scrolls internally) */}
+        <div className="min-w-0 lg:relative lg:col-span-3 xl:col-span-2">
+          <div className="lg:absolute lg:inset-0">
+            <SitePageTree
+              site={selectedSite}
+              pages={pages}
+              selectedPath={selectedPagePath}
+              onSelectPath={setSelectedPagePath}
+              onPagesChanged={refreshAll}
+              className="max-h-[460px] lg:max-h-none"
+            />
+          </div>
         </div>
 
         {/* Center: 5 KPI Cards + Interactive Topology Canvas */}
@@ -116,9 +119,14 @@ export function LiveJourneyPage() {
           />
         </div>
 
-        {/* Right: Selected Visitor Details */}
-        <div className="min-w-0 lg:col-span-3 xl:col-span-3 min-h-[420px]">
-          <VisitorDetailsPanel visitor={selectedVisitor} />
+        {/* Right: Selected Visitor Details (locked to center column height on desktop, timeline scrolls internally) */}
+        <div className="min-w-0 lg:relative lg:col-span-3 xl:col-span-3">
+          <div className="lg:absolute lg:inset-0">
+            <VisitorDetailsPanel
+              visitor={selectedVisitor}
+              className="max-h-[540px] lg:max-h-none"
+            />
+          </div>
         </div>
       </div>
 

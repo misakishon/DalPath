@@ -127,7 +127,7 @@ export function VisitorsPage() {
       </div>
 
       {/* Split View: Session List + Detailed Inspector */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:items-start">
         <div className="ufa-card overflow-hidden lg:col-span-8">
           <div className="flex items-center justify-between border-b border-[#E6EEF8] bg-[#FAFDFE] px-4 py-2.5">
             <span className="inline-flex items-center gap-2 text-xs font-bold text-[#0F294D]">
@@ -230,8 +230,11 @@ export function VisitorsPage() {
           )}
         </div>
 
-        <div className="lg:col-span-4">
-          <VisitorDetailsPanel visitor={selectedVisitor} />
+        <div className="lg:sticky lg:top-[104px] lg:col-span-4">
+          <VisitorDetailsPanel
+            visitor={selectedVisitor}
+            className="max-h-[560px] lg:max-h-[calc(100vh-7.5rem)]"
+          />
         </div>
       </div>
     </div>

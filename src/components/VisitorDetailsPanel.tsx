@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Check,
   CheckCircle2,
@@ -20,10 +20,18 @@ import { formatDuration, formatShortDuration, formatTimeHms } from '../api/clien
 
 interface VisitorDetailsPanelProps {
   visitor: VisitorSession | null;
+  className?: string;
 }
 
-export function VisitorDetailsPanel({ visitor }: VisitorDetailsPanelProps) {
+export function VisitorDetailsPanel({ visitor, className = '' }: VisitorDetailsPanelProps) {
   const [copied, setCopied] = useState(false);
+  const timelineScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (timelineScrollRef.current) {
+      timelineScrollRef.current.scrollTop = 0;
+    }
+  }, [visitor?.anonSessionId]);
 
   const handleCopy = () => {
     if (!visitor) return;
@@ -34,7 +42,7 @@ export function VisitorDetailsPanel({ visitor }: VisitorDetailsPanelProps) {
 
   if (!visitor) {
     return (
-      <aside className="ufa-card flex h-full flex-col items-center justify-center p-6 text-center">
+      <aside className={`ufa-card flex h-full min-h-0 flex-col items-center justify-center p-6 text-center ${className}`}>
         <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-[#EFF6FF] text-[#1D6FE8]">
           <User className="h-5 w-5" />
         </div>
@@ -61,10 +69,10 @@ export function VisitorDetailsPanel({ visitor }: VisitorDetailsPanelProps) {
   return (
     <aside
       aria-label="Selected visitor details"
-      className="ufa-card flex h-full flex-col overflow-hidden"
+      className={`ufa-card flex h-full min-h-0 flex-col overflow-hidden ${className}`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-[#E6EEF8] px-4 py-3">
+      <div className="flex shrink-0 items-center justify-between border-b border-[#E6EEF8] px-4 py-2.5">
         <div className="flex items-center gap-2">
           <User className="h-4 w-4 text-[#1D6FE8]" />
           <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#0F294D]">
@@ -95,7 +103,7 @@ export function VisitorDetailsPanel({ visitor }: VisitorDetailsPanelProps) {
       </div>
 
       {/* Key Session Metadata */}
-      <div className="space-y-2.5 border-b border-[#E6EEF8] px-4 py-3 text-xs">
+      <div className="shrink-0 space-y-2 border-b border-[#E6EEF8] px-4 py-2.5 text-xs">
         <div className="flex items-center justify-between gap-2">
           <span className="inline-flex items-center gap-2 text-[#4A6587]">
             <DeviceIcon className="h-3.5 w-3.5 text-[#3A547A]" />
@@ -155,13 +163,13 @@ export function VisitorDetailsPanel({ visitor }: VisitorDetailsPanelProps) {
           <div className="text-[10px] font-bold uppercase tracking-wider text-[#647D9E]">
             Observed Journey Path
           </div>
-          <div className="mt-0.5 truncate text-[11px] font-semibold text-[#1D4ED8]">
+          <div className="mt-0.5 truncate text-[11px] font-semibold text-[#1D4ED8]" title={visitor.routeLabels.join(' → ')}>
             {visitor.routeLabels.join(' → ')}
           </div>
         </div>
 
         {/* Privacy Redaction Guarantee Callout */}
-        <div className="flex items-center gap-2 rounded-lg border border-[#A7F3D0] bg-[#ECFDF5] px-2.5 py-2 text-[11px] font-semibold text-[#047857]">
+        <div className="flex items-center gap-2 rounded-lg border border-[#A7F3D0] bg-[#ECFDF5] px-2.5 py-1.5 text-[11px] font-semibold text-[#047857]">
           <ShieldCheck className="h-4 w-4 shrink-0 text-[#10B981]" />
           <span>
             {hasAuthRedaction
@@ -171,13 +179,24 @@ export function VisitorDetailsPanel({ visitor }: VisitorDetailsPanelProps) {
         </div>
       </div>
 
-      {/* Chronological Page-View Timeline */}
-      <div className="flex-1 overflow-y-auto px-4 py-3">
-        <div className="mb-2.5 flex items-center gap-1.5 text-xs font-bold text-[#0F294D]">
+      {/* Pinned Timeline Header */}
+      <div className="flex shrink-0 items-center justify-between border-b border-[#EEF4FC] bg-[#FAFDFE] px-4 py-2 text-xs">
+        <div className="flex items-center gap-1.5 font-bold text-[#0F294D]">
           <Clock className="h-3.5 w-3.5 text-[#1D6FE8]" />
           <span>Page-View Timeline</span>
         </div>
+        <span className="rounded-full border border-[#DCE6F4] bg-white px-2 py-0.5 font-mono text-[10px] font-semibold text-[#4A6587] tabular-nums">
+          {visitor.timeline.length} {visitor.timeline.length === 1 ? 'event' : 'events'}
+        </span>
+      </div>
 
+      {/* Scrollable Chronological Page-View Timeline */}
+      <div
+        ref={timelineScrollRef}
+        tabIndex={0}
+        aria-label="Visitor page-view timeline"
+        className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-2.5 focus:outline-none"
+      >
         <div className="relative space-y-2.5 pl-4">
           <div className="absolute bottom-2 left-[7px] top-2 w-0.5 bg-[#A7F3D0]" />
           {visitor.timeline.map((step) => (
@@ -208,7 +227,7 @@ export function VisitorDetailsPanel({ visitor }: VisitorDetailsPanelProps) {
       </div>
 
       {/* Footer: Session Duration */}
-      <div className="flex items-center justify-between border-t border-[#E6EEF8] bg-[#FAFDFE] px-4 py-2.5 text-xs">
+      <div className="flex shrink-0 items-center justify-between border-t border-[#E6EEF8] bg-[#FAFDFE] px-4 py-2.5 text-xs">
         <span className="inline-flex items-center gap-1.5 font-semibold text-[#3A547A]">
           <Hourglass className="h-3.5 w-3.5 text-[#1D6FE8]" />
           Session Duration

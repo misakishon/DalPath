@@ -22,6 +22,7 @@ interface SitePageTreeProps {
   selectedPath: string | null;
   onSelectPath: (path: string | null) => void;
   onPagesChanged: () => Promise<void>;
+  className?: string;
 }
 
 export function SitePageTree({
@@ -30,6 +31,7 @@ export function SitePageTree({
   selectedPath,
   onSelectPath,
   onPagesChanged,
+  className = '',
 }: SitePageTreeProps) {
   const [search, setSearch] = useState('');
   const [showHidden, setShowHidden] = useState(false);
@@ -97,10 +99,10 @@ export function SitePageTree({
   return (
     <aside
       aria-label="Connected site discovered pages"
-      className="ufa-card flex h-full flex-col overflow-hidden"
+      className={`ufa-card flex h-full min-h-0 flex-col overflow-hidden ${className}`}
     >
       {/* Header */}
-      <div className="border-b border-[#E6EEF8] px-3.5 py-3">
+      <div className="shrink-0 border-b border-[#E6EEF8] px-3.5 py-3">
         <div className="flex items-center justify-between">
           <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#0F294D]">
             SITE PAGES
@@ -132,7 +134,7 @@ export function SitePageTree({
       </div>
 
       {/* Connected Website Card */}
-      <div className="border-b border-[#E6EEF8] bg-[#FAFDFE] px-3.5 py-2.5">
+      <div className="shrink-0 border-b border-[#E6EEF8] bg-[#FAFDFE] px-3.5 py-2.5">
         <div className="flex items-start gap-2.5">
           <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-[#BFD3EC] bg-white text-[#1D6FE8]">
             <Globe className="h-4 w-4" />
@@ -161,7 +163,7 @@ export function SitePageTree({
       </div>
 
       {/* Page Tree */}
-      <div className="flex-1 overflow-y-auto px-2.5 py-2.5">
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2.5 py-2.5">
         {selectedPath && (
           <button
             type="button"
@@ -330,7 +332,7 @@ export function SitePageTree({
       </div>
 
       {/* Dynamic Discovery Footer */}
-      <div className="border-t border-[#E6EEF8] bg-[#F8FBFF] p-2.5">
+      <div className="shrink-0 border-t border-[#E6EEF8] bg-[#F8FBFF] p-2.5">
         <div className="rounded-lg border border-[#A7F3D0] bg-[#ECFDF5] px-2.5 py-2">
           <div className="flex items-center justify-between gap-2 text-[11px] font-semibold text-[#047857]">
             <span className="inline-flex items-center gap-1.5">
